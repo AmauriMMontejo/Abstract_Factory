@@ -1,5 +1,6 @@
 namespace FactoryAbstractEjercicio {
     interface arma {
+        nombre(): void;
         municion(): void;
         daño(): void;
     }
@@ -9,6 +10,9 @@ namespace FactoryAbstractEjercicio {
     }
 
     class raygun implements arma {
+        nombre(): void {
+            console.log('RayGun')
+        }
         municion(): void {
             console.log('Municion plasma de alta energía');
         }
@@ -24,6 +28,9 @@ namespace FactoryAbstractEjercicio {
     }
 
     class EspadaEnergia implements arma {
+        nombre(): void{
+            console.log('Espada de energia');
+        }
         municion(): void {
             console.log('Nucleo de energia');
         }
@@ -35,6 +42,24 @@ namespace FactoryAbstractEjercicio {
     class armaduraMJOLNIR implements armadura {
         defensa(): void {
             console.log('Armadura MJOLNIR: Armadura de los Spartans');
+        }
+    }
+
+    class Lancer implements arma {
+        nombre(): void {
+            console.log('Lancer')
+        }
+        municion(): void {
+            console.log('Municion de fusil de asalto');
+        }
+        daño(): void {
+            console.log('Daño moderado a medio rango');
+        }
+    }
+
+    class armaduraCGO implements armadura {
+        defensa(): void {
+            console.log('Armadura de combate de la CGO: Armadura de los soldados de la CGO');
         }
     }
 
@@ -61,6 +86,15 @@ namespace FactoryAbstractEjercicio {
         }
     }
 
+    class GearsFactory implements EquipoFactory{
+        createArma(): arma {
+            return new Lancer();
+        }
+        createArmadura(): armadura {
+            return new armaduraCGO();
+        }
+    }
+
     class juego {
         constructor(private factory: EquipoFactory) {}
 
@@ -68,6 +102,7 @@ namespace FactoryAbstractEjercicio {
             const arma = this.factory.createArma();
             const armadura = this.factory.createArmadura();
 
+            arma.nombre();
             arma.municion();
             arma.daño();
             armadura.defensa();
@@ -79,12 +114,14 @@ namespace FactoryAbstractEjercicio {
     function main() {
         let factory: EquipoFactory;
 
-        const EquipoFactory = prompt('Ingrese el nombre del juego (Cod/1 o Halo/2):');
+        const EquipoFactory = prompt('Ingrese el nombre del juego (Cod/1 o Halo/2 o Gears/3):');
 
         if (EquipoFactory === 'Cod' || EquipoFactory === '1') {
             factory = new CodFactory();
-        } else {
+        }else if (EquipoFactory === 'Halo' || EquipoFactory === '2') {
             factory = new HaloFactory();
+        }else{
+            factory = new GearsFactory();
         }
         const Juego = new juego(factory);
         Juego.equipar();
